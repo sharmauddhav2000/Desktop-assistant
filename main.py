@@ -5,18 +5,30 @@ listener=sr.Recognizer()
 engine=pyttsx3.init()
 voices=engine.getProperty('voices')
 engine.setProperty('voice',voices[1].id)
-engine.say('Hello,I am alexa')
-engine.say('What can I do for you')
+def talk(text):
+    engine.say(text)
+    engine.runAndWait()
 
-engine.runAndWait()
+def user_command():
+    try:
+        with sr.Microphone() as source:
+          print('listening...')
+          voice=listener.listen(source)
+          command=listener.recognize_google(voice)
+          command=command.lower()
+          if 'alexa' in command:
+                command = command.replace('alexa', '')
+                print(command)
+    except:
+            pass
+    return command
 
-try:
-    with sr.Microphone() as source:
-        print('listening...')
-        voice=listener.listen(source)
-        command=listener.recognize_google(voice)
-        command=command.lower()
-        if 'alexa' in command:
-            print(command)
-except:
-    pass
+def run_alexa():
+    command=user_command()
+    if 'play' in command:
+        song=command.replace('play','')
+        talk('playing ' + song)
+        print(song)
+
+
+run_alexa()
