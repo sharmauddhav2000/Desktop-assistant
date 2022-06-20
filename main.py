@@ -1,22 +1,15 @@
 import speech_recognition as sr
 import pyttsx3
 
-def command():
-    r=sr.Recognizer()
-    with sr.Microphone as source:
-        print("Alexa: Litsening...")
-        audio=r.listen(source)
-        try:
-            query=r.recognition_google(audio)
-            print(f"master:{query}")
-            return query
-        except:
-            print("Try Again")
-
-engine=pyttsx3.init('sapi5')
-voices=engine.getProperty('voices')
-engine.setProperty('voices',voices[0].id)
-
-def speak(audio):
-    engine.say(audio)
-    engine.runAndWait()
+listener=sr.Recognizer()
+engine=pyttsx3.init()
+try:
+    with sr.Microphone() as source:
+        print('listening...')
+        voice=listener.listen(source)
+        command=listener.recognize_google(voice)
+        command=command.lower()
+        if 'alexa' in command:
+            print(command)
+except:
+    pass
